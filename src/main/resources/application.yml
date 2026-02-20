@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: warehouse-service
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: warehouse-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.example.warehouse_service"
+        spring.json.value.default.type: "com.example.warehouse_service.Order"
+        spring.json.use.type.headers: false
+
+server:
+  port: 8081
