@@ -2,7 +2,7 @@ package com.example.userService.controller;
 
 import com.example.userService.dto.Response;
 import com.example.userService.dto.UserNotificationDto;
-import com.example.userService.service.NotificationService;
+import com.example.userService.service.MessageProcessor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,20 +13,20 @@ import java.util.List;
 @RequestMapping("/api/kafka")
 public class KafkaController {
 
-    private final NotificationService notificationService;
+    private final MessageProcessor messageProcessor;
 
-    public KafkaController(NotificationService notificationService){
-        this.notificationService = notificationService;
+    public KafkaController(MessageProcessor messageProcessor){
+        this.messageProcessor = messageProcessor;
     }
 
     @GetMapping("/messages")
     public List<UserNotificationDto> getAll(){
-        return notificationService.getAllMessages();
+        return messageProcessor.getAllMessages();
     }
 
     @GetMapping("/sendMessagesUsers")
     public List<Response> sendMessagesAllUsers(){
-        return notificationService.sendUserMessage();
+        return messageProcessor.sendUserMessage();
     }
 
 

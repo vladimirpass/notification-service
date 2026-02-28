@@ -2,7 +2,7 @@ package com.example.userService.controller;
 
 import com.example.userService.dto.Response;
 import com.example.userService.dto.UserNotificationDto;
-import com.example.userService.service.NotificationService;
+import com.example.userService.service.MessageProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 class KafkaControllerTest {
 
     @Mock
-    private NotificationService notificationService;
+    private MessageProcessor messageProcessor;
 
     @InjectMocks
     private KafkaController kafkaController;
@@ -47,7 +47,7 @@ class KafkaControllerTest {
     @Test
     void getAll_ShouldReturnAllMessagesFromService() {
         // Arrange
-        when(notificationService.getAllMessages()).thenReturn(testNotifications);
+        when(messageProcessor.getAllMessages()).thenReturn(testNotifications);
 
         // Act
         List<UserNotificationDto> result = kafkaController.getAll();
@@ -64,15 +64,15 @@ class KafkaControllerTest {
         assertEquals("UPDATED", result.get(2).statusType());
 
         // Verify
-        verify(notificationService, times(1)).getAllMessages();
-        verifyNoMoreInteractions(notificationService);
+        verify(messageProcessor, times(1)).getAllMessages();
+        verifyNoMoreInteractions(messageProcessor);
     }
 
 
     @Test
     void getAll_WhenServiceReturnsEmptyList_ShouldReturnEmptyList() {
         // Arrange
-        when(notificationService.getAllMessages()).thenReturn(Collections.emptyList());
+        when(messageProcessor.getAllMessages()).thenReturn(Collections.emptyList());
 
         // Act
         List<UserNotificationDto> result = kafkaController.getAll();
@@ -82,13 +82,13 @@ class KafkaControllerTest {
         assertTrue(result.isEmpty());
 
         // Verify
-        verify(notificationService, times(1)).getAllMessages();
+        verify(messageProcessor, times(1)).getAllMessages();
     }
 
     @Test
     void getAll_WhenServiceReturnsNull_ShouldReturnNull() {
         // Arrange
-        when(notificationService.getAllMessages()).thenReturn(null);
+        when(messageProcessor.getAllMessages()).thenReturn(null);
 
         // Act
         List<UserNotificationDto> result = kafkaController.getAll();
@@ -97,13 +97,13 @@ class KafkaControllerTest {
         assertNull(result);
 
         // Verify
-        verify(notificationService, times(1)).getAllMessages();
+        verify(messageProcessor, times(1)).getAllMessages();
     }
 
     @Test
     void sendMessagesAllUsers_ShouldReturnResponsesFromService() {
         // Arrange
-        when(notificationService.sendUserMessage()).thenReturn(testResponses);
+        when(messageProcessor.sendUserMessage()).thenReturn(testResponses);
 
         // Act
         List<Response> result = kafkaController.sendMessagesAllUsers();
@@ -121,13 +121,13 @@ class KafkaControllerTest {
         assertTrue(secondResponse.message().contains("аккаунт был удален"));
 
         // Verify
-        verify(notificationService, times(1)).sendUserMessage();
-        verifyNoMoreInteractions(notificationService);
+        verify(messageProcessor, times(1)).sendUserMessage();
+        verifyNoMoreInteractions(messageProcessor);
     }
     @Test
     void sendMessagesAllUsers_WhenServiceReturnsEmptyList_ShouldReturnEmptyList() {
         // Arrange
-        when(notificationService.sendUserMessage()).thenReturn(Collections.emptyList());
+        when(messageProcessor.sendUserMessage()).thenReturn(Collections.emptyList());
 
         // Act
         List<Response> result = kafkaController.sendMessagesAllUsers();
@@ -137,7 +137,7 @@ class KafkaControllerTest {
         assertTrue(result.isEmpty());
 
         // Verify
-        verify(notificationService, times(1)).sendUserMessage();
+        verify(messageProcessor, times(1)).sendUserMessage();
     }
 
 

@@ -21,15 +21,15 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class NotificationServiceTest {
+class MessageProcessorTest {
 
-    private NotificationService notificationService;
+    private MessageProcessor messageProcessor;
 
     private List<UserNotificationDto> testNotifications;
 
     @BeforeEach
     void setUp() {
-        notificationService = new NotificationService();
+        messageProcessor = new MessageProcessor();
 
         // Подготовка тестовых данных
         testNotifications = Arrays.asList(
@@ -74,7 +74,7 @@ class NotificationServiceTest {
                 })) {
 
             // Вызываем тестируемый метод
-            List<UserNotificationDto> result = notificationService.getAllMessages();
+            List<UserNotificationDto> result = messageProcessor.getAllMessages();
 
             // Проверяем результаты
             assertNotNull(result);
@@ -93,7 +93,7 @@ class NotificationServiceTest {
                     when(mock.partitionsFor("users")).thenReturn(Collections.emptyList());
                 })) {
 
-            List<UserNotificationDto> result = notificationService.getAllMessages();
+            List<UserNotificationDto> result = messageProcessor.getAllMessages();
 
             assertNotNull(result);
             assertTrue(result.isEmpty());
@@ -144,7 +144,7 @@ class NotificationServiceTest {
                     when(mock.position(testPartition)).thenReturn(1L);
                 })) {
 
-            List<UserNotificationDto> result = notificationService.getAllMessages();
+            List<UserNotificationDto> result = messageProcessor.getAllMessages();
 
             assertNotNull(result);
             assertEquals(1, result.size());
@@ -159,7 +159,7 @@ class NotificationServiceTest {
     @Test
     void sendUserMessage_CreatesCorrectResponses() {
         // Создаем шпион для NotificationService
-        NotificationService spyService = spy(notificationService);
+        MessageProcessor spyService = spy(messageProcessor);
 
         // Мокаем getAllMessages для возврата тестовых данных
         doReturn(testNotifications).when(spyService).getAllMessages();
